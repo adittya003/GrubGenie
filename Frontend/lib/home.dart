@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grub_genie/nearfood.dart';
+import 'package:page_transition/page_transition.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -20,7 +22,14 @@ class _HomeState extends State<Home> {
         ),
         const Padding(padding: EdgeInsets.all(30)),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    child: const FoodList(),
+                    type: PageTransitionType.rightToLeft,
+                    duration: const Duration(milliseconds: 700)));
+          },
           style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(Colors.red.shade300),
           ),
