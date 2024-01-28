@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grub_genie/nearfood.dart';
 import 'package:grub_genie/requestfood.dart';
-import 'package:grub_genie/storelogin.dart';
+import 'package:grub_genie/login.dart';
+import 'package:grub_genie/registration.dart';
 import 'package:page_transition/page_transition.dart';
 
 class Home extends StatefulWidget {
@@ -72,7 +73,7 @@ class _HomeState extends State<Home> {
             Navigator.push(
               context,
               PageTransition(
-                child: const StoreLogin(),
+                child: const Login(),
                 type: PageTransitionType.rightToLeft,
                 duration: const Duration(milliseconds: 700),
               ),
@@ -82,7 +83,30 @@ class _HomeState extends State<Home> {
             backgroundColor: MaterialStatePropertyAll(Colors.red.shade300),
           ),
           child: Text(
-            "Store Login",
+            "Login",
+            style: GoogleFonts.josefinSans(
+              color: Colors.black87,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        const Padding(padding: EdgeInsets.all(5)),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                child: const Registration(),
+                type: PageTransitionType.rightToLeft,
+                duration: const Duration(milliseconds: 700),
+              ),
+            );
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(Colors.red.shade300),
+          ),
+          child: Text(
+            "Registration",
             style: GoogleFonts.josefinSans(
               color: Colors.black87,
               fontSize: 16,
