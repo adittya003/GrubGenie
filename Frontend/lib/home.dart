@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grub_genie/nearfood.dart';
 import 'package:grub_genie/requestfood.dart';
+import 'package:grub_genie/storelogin.dart';
 import 'package:page_transition/page_transition.dart';
 
 class Home extends StatefulWidget {
@@ -67,7 +68,16 @@ class _HomeState extends State<Home> {
         ),
         const Padding(padding: EdgeInsets.all(5)),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                child: const StoreLogin(),
+                type: PageTransitionType.rightToLeft,
+                duration: const Duration(milliseconds: 700),
+              ),
+            );
+          },
           style: ButtonStyle(
             backgroundColor: MaterialStatePropertyAll(Colors.red.shade300),
           ),
