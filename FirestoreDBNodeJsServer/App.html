@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4 {
+            margin-top: 30px;
+        }
+
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-size: 90%;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Documentation</h1>
+    
+    <h2>CommerceNearMeRoutes</h2>
+
+    <h3>CommerceNearMeRouter</h3>
+
+    <h4>GET "CommerceNearMeRouter/AllStores"</h4>
+    <p>Retrieves all store details in alphabetical order.</p>
+
+    <h4>POST "CommerceNearMeRouter/foodNearMeDist"</h4>
+    <p><strong>Request Body:</strong></p>
+    <pre><code>{
+    location: [latitude, longitude],
+    maxDist: number, // Maximum distance from user
+    sort: "dist" or "name" // Sorting result based on name or distance from user
+}</code></pre>
+    <p><strong>Response:</strong> Store details</p>
+
+    <h4>POST "CommerceNearMeRouter/foodNearMeItem"</h4>
+    <p><strong>Request Body:</strong></p>
+    <pre><code>{
+    location: [latitude, longitude],
+    maxDist: number, // Maximum distance from user :- default dist 5kms
+    sorts: "dist" or "name" or "price",  :- default dist
+    Item: "Chicken"
+}</code></pre>
+    <p><strong>Response:</strong> Retrieves stores with specified items.</p>
+
+    <h2>CommerceRequestRouter</h2>
+
+    <h3>Request Food</h3>
+    <p><strong>POST CommerceRequestRouter/requestFood</strong></p>
+    <p><strong>Request Body:</strong></p>
+    <pre><code>{
+    userId: string,
+    Orders: {
+        storeId: [itemids, ...]
+    },
+    CostPrice: number,
+    AdditionalNotes: (optional)
+}</code></pre>
+    <p>Makes a request entry in the request table.</p>
+
+    <p><strong>PATCH CommerceRequestRouter/requestFood</strong></p>
+    <p><strong>Request Body:</strong> Any combination of additional notes, status, discount.</p>
+    <pre><code>
+      {
+        DiscountPrice: 342,
+        AdditionalNotes: "HEY THERE SUP"
+      }
+</code></pre>
+</body>
+</html>
