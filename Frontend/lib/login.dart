@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class StoreLogin extends StatefulWidget {
-  const StoreLogin({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _StoreLoginState createState() => _StoreLoginState();
+  _LoginState createState() => _LoginState();
 }
 
-class _StoreLoginState extends State<StoreLogin> {
-  bool isLoginPage = true;
+class _LoginState extends State<Login> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class _StoreLoginState extends State<StoreLogin> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                isLoginPage ? "Login" : "Register",
+                "Login",
                 style: GoogleFonts.oswald(color: Colors.black, fontSize: 40),
                 textAlign: TextAlign.center,
               ),
@@ -69,26 +70,7 @@ class _StoreLoginState extends State<StoreLogin> {
                       MaterialStatePropertyAll(Colors.green.shade300),
                 ),
                 child: Text(
-                  isLoginPage ? "Login" : "Register",
-                  style: GoogleFonts.josefinSans(
-                    color: Colors.black87,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-              const Padding(padding: EdgeInsets.all(10)),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    isLoginPage = !isLoginPage;
-                  });
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStatePropertyAll(Colors.red.shade300),
-                ),
-                child: Text(
-                  isLoginPage ? "Switch to Register" : "Switch to Login",
+                  "Login",
                   style: GoogleFonts.josefinSans(
                     color: Colors.black87,
                     fontSize: 16,

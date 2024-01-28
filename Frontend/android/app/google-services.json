@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225205516427",
+    "project_id": "grubgenie-ea856",
+    "storage_bucket": "grubgenie-ea856.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225205516427:android:5bd9eac9b2a9e4a82fbc8e",
+        "android_client_info": {
+          "package_name": "com.example.grub_genie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApkrQt3bo15NTx-Wcsa2qK9XNKNSTqGnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
