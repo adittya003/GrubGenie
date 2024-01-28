@@ -10,7 +10,7 @@ class RequestFood extends StatefulWidget {
 }
 
 class _RequestFoodState extends State<RequestFood> {
-  String foodItem = '';
+  String? selectedFoodItem = '';
   int quantity = 1;
   DateTime? preferredExpirationDate;
   String additionalNotes = '';
@@ -18,6 +18,11 @@ class _RequestFoodState extends State<RequestFood> {
   double maxDistance = 0.0;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  List<String> foodItems = [
+    'Maggi Masala 1-Pack',
+    'iD Chapati 350g',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +49,33 @@ class _RequestFoodState extends State<RequestFood> {
                   textAlign: TextAlign.center,
                 ),
                 const Padding(padding: EdgeInsets.all(20)),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Food Item',
-                    labelStyle: GoogleFonts.josefinSans(
+                DropdownMenu<String>(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  inputDecorationTheme: InputDecorationTheme(
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.5),
+                  ),
+                  initialSelection: selectedFoodItem,
+                  label: Text(
+                    'Food Item',
+                    style: GoogleFonts.josefinSans(
                       color: Colors.black87,
                       fontSize: 16,
                     ),
                   ),
-                  onChanged: (value) {
+                  onSelected: (String? foodItem) {
                     setState(() {
-                      foodItem = value;
+                      selectedFoodItem = foodItem;
                     });
                   },
+                  dropdownMenuEntries: foodItems
+                      .map<DropdownMenuEntry<String>>(
+                        (String foodItem) => DropdownMenuEntry<String>(
+                          value: foodItem,
+                          label: foodItem,
+                        ),
+                      )
+                      .toList(),
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
                 Row(
@@ -164,12 +183,13 @@ class _RequestFoodState extends State<RequestFood> {
                 const Padding(padding: EdgeInsets.all(10)),
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Additional Notes',
-                    labelStyle: GoogleFonts.josefinSans(
-                      color: Colors.black87,
-                      fontSize: 16,
-                    ),
-                  ),
+                      labelText: 'Additional Notes',
+                      labelStyle: GoogleFonts.josefinSans(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.5)),
                   maxLines: 3,
                   onChanged: (value) {
                     setState(() {
@@ -180,12 +200,13 @@ class _RequestFoodState extends State<RequestFood> {
                 const Padding(padding: EdgeInsets.all(10)),
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'Location',
-                    labelStyle: GoogleFonts.josefinSans(
-                      color: Colors.black87,
-                      fontSize: 16,
-                    ),
-                  ),
+                      labelText: 'Location',
+                      labelStyle: GoogleFonts.josefinSans(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.5)),
                   onChanged: (value) {
                     setState(() {
                       location = value;
@@ -200,6 +221,8 @@ class _RequestFoodState extends State<RequestFood> {
                       color: Colors.black87,
                       fontSize: 16,
                     ),
+                    filled: true,
+                    fillColor: Colors.white.withOpacity(0.5),
                   ),
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
