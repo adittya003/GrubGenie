@@ -29,11 +29,18 @@ const loginRouter = require("./Routers/LoginRoutes");
 const appRouter = require("./Routers/AppRoutes");
 const CommerceNearMeRouter = require("./Routers/CommerceNearMeRoutes");
 const CommerceRequestRouter = require("./Routers/CommerceRequestRoutes");
+const RegisterRouter = require("./Routers/RegisterRoutes");
+const VendorRouter = require("./Routers/VendorRoutes");
+const UserStoreRouter = require("./Routers/UserStoreRoutes");
+
+
 //API ROUTESS
 app.use("/loginRouter", loginRouter);
 app.use("/appRouter", appRouter);
 app.use("/CommerceNearMeRouter",CommerceNearMeRouter);
-app.use("/commerceRequestRouter",CommerceRequestRouter);
-
+app.use("/CommerceRequestRouter",CommerceRequestRouter);
+app.use("/RegisterRouter",RegisterRouter);
+app.use("/VendorRouter",VendorRouter);
+app.use("/UserStoreRouter", UserStoreRouter);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started at ${PORT}`));

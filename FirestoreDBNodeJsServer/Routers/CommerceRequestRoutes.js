@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const CommerceRequestRouter = express.Router();
 const { auth, db, admin } = require("../db");
-const { haversine,generateRandomString } = require("../helper");
+const { haversine,generateRandomString,validateEmail } = require("../helper");
 CommerceRequestRouter.use(bodyParser.json());
 
 CommerceRequestRouter.post("/requestFood", async (req, res) => {
@@ -11,8 +11,8 @@ CommerceRequestRouter.post("/requestFood", async (req, res) => {
         const requestId = 'RQ' + generateRandomString(10); // Generate request ID
         const requestRef = db.collection('RequestDetails').doc(requestId); // Reference to the document
         const data = {
-          requestId: requestId,
-          userId: requestData.UserId,
+          RequestId: requestId,
+          UserId: requestData.UserId,
           Orders: requestData.Orders,
           CostPrice: requestData.CostPrice,
           DiscountPrice: null,
@@ -29,7 +29,7 @@ CommerceRequestRouter.post("/requestFood", async (req, res) => {
   });
   
 
-
+//PATCH
   CommerceRequestRouter.patch("/requestFood/:requestId", async (req, res) => {
     try {
       const requestId = req.params.requestId;
@@ -55,5 +55,6 @@ CommerceRequestRouter.post("/requestFood", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
+
 
   module.exports=CommerceRequestRouter
