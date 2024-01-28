@@ -40,6 +40,7 @@ dependencies:
   provider: 
   google_maps_flutter: ^2.5.3
   jiffy: ^6.2.2
+  easy_search_bar: 
 
 dev_dependencies:
   flutter_test:
