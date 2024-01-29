@@ -30,6 +30,51 @@
 <body>
     <h1>API Documentation</h1>
     
+    <h2>UserStoreRoutes</h2>
+
+    <h3>User Items</h3>
+
+    <h4>GET "/userItems/:UserId"</h4>
+    <p>Retrieves items associated with a particular user.</p>
+    <p><strong>Parameters:</strong> UserId (string)</p>
+
+    <h3>User Stores</h3>
+
+    <h4>GET "/userStore/:UserId/:StoreId"</h4>
+    <p>Retrieves stores visited by a particular user.</p>
+    <p><strong>Parameters:</strong> UserId (string), StoreId (string)</p>
+
+    <h4>GET "/StoreItems/:ItemId"</h4>
+    <p>Retrieves stores associated with a particular item.</p>
+    <p><strong>Parameters:</strong> ItemId (string)</p>
+
+    <h2>VendorRoutes</h2>
+
+    <h3>Register Item</h3>
+
+    <h4>POST "/registerItem"</h4>
+    <p>Registers a new item in the store.</p>
+    <p><strong>Request Body:</strong> ExpiryDate (string), ItemMRP (number), ItemSP (number), ItemName (string), StockQuantity (number, optional), StoreId (string)</p>
+
+    <h4>PATCH "/updateItem/:itemId"</h4>
+    <p>Updates information of an existing item.</p>
+    <p><strong>Parameters:</strong> itemId (string)</p>
+    <p><strong>Request Body:</strong> Any combination of ItemName (string), ExpiryDate (string), StockQuantity (number), ItemMRP (number)</p>
+
+    <h2>RegisterRoutes</h2>
+
+    <h3>Register Store</h3>
+
+    <h4>POST "/registerStore"</h4>
+    <p>Registers a new store.</p>
+    <p><strong>Request Body:</strong> GST (string), Location (string), PhoneNumber (string, optional), StoreName (string), Email (string, optional)</p>
+
+    <h3>Register User</h3>
+
+    <h4>POST "/registerUser"</h4>
+    <p>Registers a new user.</p>
+    <p><strong>Request Body:</strong> DOB (string, optional), PhoneNumber (string), UserName (string), Email (string, optional)</p>
+    
     <h2>CommerceNearMeRoutes</h2>
 
     <h3>CommerceNearMeRouter</h3>

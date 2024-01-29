@@ -10,9 +10,12 @@ CommerceRequestRouter.post("/requestFood", async (req, res) => {
         const requestData = req.body;
         const requestId = 'RQ' + generateRandomString(10); // Generate request ID
         const requestRef = db.collection('RequestDetails').doc(requestId); // Reference to the document
+        const Location = requestData.Location;
+        const geoPoint = new admin.firestore.GeoPoint(Location[0], Location[1]);
         const data = {
           RequestId: requestId,
           UserId: requestData.UserId,
+          Location : geoPoint,
           Orders: requestData.Orders,
           CostPrice: requestData.CostPrice,
           DiscountPrice: null,
