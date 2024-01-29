@@ -23,7 +23,7 @@ function haversine(lat1, lon1, lat2, lon2) {
 }
 
 function generateRandomString(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -31,4 +31,10 @@ function generateRandomString(length) {
     return result;
   }
 
-module.exports = { haversine,generateRandomString };
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+} 
+
+
+module.exports = { haversine,generateRandomString , validateEmail};
