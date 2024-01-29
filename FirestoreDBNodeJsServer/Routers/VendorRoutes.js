@@ -11,6 +11,7 @@ VendorRouter.post("/registerItem", async (req, res) => {
         const body = req.body;
         const ExpiryDate = body.ExpiryDate; 
         const ItemMRP = body.ItemMRP;
+        const ItemSP = body.ItemSP;
         const ItemName= body.ItemName;
         const StockQuantity = body.StockQuantity || 0;
         const StoreId = body.StoreId; 
@@ -23,7 +24,8 @@ VendorRouter.post("/registerItem", async (req, res) => {
           StoreId: StoreId,
           ExpiryDate: ExpiryDate,
           StockQuantity:StockQuantity,
-          ItemMRP:ItemMRP
+          ItemMRP:ItemMRP,
+          ItemSP :ItemSP 
         };
         await ItemRef.set(data);
         res.status(200).json({ message: "success" });

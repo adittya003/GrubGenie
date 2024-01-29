@@ -5,7 +5,7 @@ const { auth, db, admin } = require("../db");
 const { haversine, generateRandomString, validateEmail } = require("../helper");
 
 UserStoreRouter.use(bodyParser.json());
-
+//user has got which items
 UserStoreRouter.get("/userItems/:UserId", async (req, res) => {
   try {
     const UserId = req.params.UserId;
@@ -16,7 +16,6 @@ UserStoreRouter.get("/userItems/:UserId", async (req, res) => {
       const data = doc.data();
       result.push(data);
     });
-    console.log("UserId from request:", UserId);
     const filteredData = result.filter(item => {
       console.log("UserId from document:", item.UserId);
       return item.UserId === UserId;
@@ -30,66 +29,83 @@ UserStoreRouter.get("/userItems/:UserId", async (req, res) => {
   }
 });
 
+//======================================================================================================
+//user has gone which stores
+UserStoreRouter.get("/userStore/:UserId/:StoreId", async (req, res) => {
+  try {
+    const UserId = req.params.UserId;
+    const StoreId = req.params.StoreId;
+    
+    const snapshot = await db.collection('RequestDetails').where('UserId', '==', UserId).get();
+    const storeIds = new Set(); // Use a Set to avoid duplicate storeIds
+
+    if (snapshot.empty) {
+      return res.status(404).json({ error: "Request not found." });
+    }
+
+    snapshot.forEach(async (doc) => {
+      const data = doc.data();
+      
+      // Iterate over orders to extract storeIds
+      Object.keys(data.Orders).forEach(storeId => {
+        storeIds.add(storeId); // Add storeId to the set
+      });
+    });
+
+    const storesPromises = Array.from(storeIds).map(async (storeId) => {
+      const storeSnapshot = await db.collection('StoreDetails').where('StoreId', '==', storeId).get();
+      const storeDetails = [];
+      storeSnapshot.forEach((doc) => {
+        const data2 = doc.data();
+        storeDetails.push(data2);
+      });
+      return storeDetails;
+    });
+
+    // Wait for all store details to be fetched
+    const result = await Promise.all(storesPromises);
+    
+    // Flatten the array of arrays into a single array
+    const flattenedResult = result.flat();
+    console.log(flattenedResult)
+    res.status(200).json(flattenedResult);
+  } catch (error) {
+    console.error("Error updating request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//Item in which Stores
+UserStoreRouter.get("/StoreItems/:ItemId", async (req, res) => {
+  try {
+    const ItemId = req.params.ItemId;
+    const snapshot = await db.collection('ItemDetails').where('ItemId', '==', ItemId).get();
+    const result = [];
+
+    if (snapshot.empty) {
+      return res.status(404).json({ error: "Request not found." });
+    }
+
+    for (const doc of snapshot.docs) {
+      const data = doc.data();
+      const StoreSnapshot = await db.collection('StoreDetails').where("StoreId", "==", data.StoreId).get();
+
+      if (StoreSnapshot.empty) {
+        return res.status(404).json({ error: "Store Not Found." });
+      }
+
+      StoreSnapshot.forEach((storeDoc) => {
+        result.push({ [storeDoc.data().StoreId]: storeDoc.data()});
+      });
+    }
+    console.log(result);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error updating request:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
-
-
-
-// UserStoreRouter.get("/userStore/:UserId/:StoreId", async (req, res) => {
-//   try {
-//     const UserId = req.params.UserId;
-//     const StoreId = req.params.StoreId;
-//     const snapshot = await db.collection('RequestDetails').where('UserId', '===', UserId).get();
-
-//     if (snapshot.empty) {
-//       return res.status(404).json({ error: "Request not found." });
-//     }
-
-//     const result = [];
-//     for (const doc of snapshot.docs) {
-//       const StoreRef = db.collection('StoreDetails').doc(doc.data().StoreId);
-//       const StoreSnapshot = await StoreRef.get();
-//       if (!StoreSnapshot.exists) {
-//         return res.status(200).json({ message: "None Found" });
-//       } else {
-//         result.push(StoreSnapshot.data());
-//       }
-//     }
-
-//     res.status(200).json(result);
-//   } catch (error) {
-//     console.error("Error updating request:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// UserStoreRouter.get("/StoreItems/:ItemId/:StoreId", async (req, res) => {
-//   try {
-//     const ItemId = req.params.ItemId;
-//     const StoreId = req.params.StoreId;
-//     const snapshot = await db.collection('ItemDetails').where('ItemId', '==', ItemId).where('StoreId', '==', StoreId).get();
-
-//     if (snapshot.empty) {
-//       return res.status(404).json({ error: "Request not found." });
-//     }
-
-//     const result = [];
-//     for (const doc of snapshot.docs) {
-//       const item = doc.data();
-//       const StoreRef = db.collection('StoreDetails').doc(item.StoreId);
-//       const StoreSnapshot = await StoreRef.get();
-//       if (!StoreSnapshot.exists) {
-//         return res.status(200).json({ message: "None Found" });
-//       } else {
-//         result.push({ item: item, store: StoreSnapshot.data() });
-//       }
-//     }
-
-//     res.status(200).json(result);
-//   } catch (error) {
-//     console.error("Error updating request:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 module.exports = UserStoreRouter;

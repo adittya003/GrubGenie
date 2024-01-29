@@ -16,14 +16,14 @@ RegisterRouter.post("/registerStore", async (req, res) => {
         const StoreName = body.StoreName;
         const Email = validateEmail(body.Email) ? body.Email : null;
         const StoreId = 'SI' + generateRandomString(10); 
-        
+        const geoPoint = new admin.firestore.GeoPoint(Location[0], Location[1]);
         const RegisterRef = db.collection('StoreDetails').doc(StoreId); // Reference to the document
         const data = {
           StoreId: StoreId,
           StoreName: StoreName,
           GST: GST,
           Email: Email,
-          Location: Location,
+          Location: geoPoint,
           PhoneNumber: PhoneNumber
         };
         await RegisterRef.set(data);
@@ -60,4 +60,7 @@ RegisterRouter.post("/registerUser", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
 });
+
+
+
 module.exports = RegisterRouter;
