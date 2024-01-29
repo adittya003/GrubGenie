@@ -138,7 +138,60 @@ CommerceNearMeRouter.post("/foodNearMeDist", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
+////Stores that are within 5 kms by default or the maxDist passed as body  of user with all store items
+CommerceNearMeRouter.post("/foodNearMeDistItemNames", async (req, res) => {
+  try {
+    const body = req.body;
+    const Userlat = body.location[0];
+    const Userlong = body.location[1];
+    const maxDist = body.maxDist || 5;
+    const sorts = body.sorts || "dist";
+    const snapshot = await db.collection("StoreDetails").get();
+    const stores = [];
+    const result = [];
+    
+    snapshot.forEach((doc) => {
+      stores.push(doc.data());
+    });
+    stores.forEach(async(store) => {
+      let dist = haversine(
+        Userlat,
+        Userlong,
+        store.Location._latitude,
+        store.Location._longitude
+      );
+      if (dist < maxDist) {
+        const ItemSnapshot = await db.collection("ItemDetails").get();
+        const Items = [];
+        ItemSnapshot.forEach((doc) => {
+        Items.push(doc.data());
+        });
+        console.log(Items);
+        Items.filter((item)=>item.StoreId==store.StoreId)
+        console.log("======================="); 
+        
+        result.push({store: store, distance: dist ,items :Items});
+      }
+    });
+    // Sorting the result array based on distance
+    if(sorts==="dist"){
+      result.sort((a, b) => a.distance - b.distance);
+    }
+    else if(sorts==="name"){
+      result.sort((a, b) => {
+        const nameA = a.name.toLowerCase();
+        const nameB = b.name.toLowerCase();
+        if (nameA < nameB) return -1;
+        if (nameA > nameB) return 1;
+        return 0;
+      });
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error authenticating user:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 //Find Based on FoodItem sorted by distance
 CommerceNearMeRouter.post("/foodNearMeItem", async (req, res) => {
   try {
