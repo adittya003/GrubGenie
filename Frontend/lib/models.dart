@@ -24,14 +24,14 @@ class NearFoodProvider extends ChangeNotifier {
   }
 
   void searched(String query) {
-    if (query == '') {
-      cardList = List.from(totalCardList);
-      notifyListeners();
-      return;
-    }
+    // if (query == '') {
+    //   cardList = List.from(totalCardList);
+    //   notifyListeners();
+    //   return;
+    // } may work without
     cardList.clear();
     for (var result in totalCardList) {
-      if (result.item.contains(query)) {
+      if (result.item.toLowerCase().contains(query.toLowerCase())) {
         cardList.add(result);
       }
     }
