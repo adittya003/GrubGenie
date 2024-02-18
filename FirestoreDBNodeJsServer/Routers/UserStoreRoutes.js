@@ -5,12 +5,13 @@ const { auth, db, admin } = require("../db");
 const { haversine, generateRandomString, validateEmail } = require("../helper");
 
 UserStoreRouter.use(bodyParser.json());
-//user has got which items
+
+//user has got which items , which request he has
 UserStoreRouter.get("/userItems/:UserId", async (req, res) => {
   try {
     const UserId = req.params.UserId;
     const snapshot = await db.collection('RequestDetails').get();
-    const result = [];
+    let result = [];
     
     snapshot.forEach((doc) => {
       const data = doc.data();
@@ -21,8 +22,8 @@ UserStoreRouter.get("/userItems/:UserId", async (req, res) => {
       return item.UserId === UserId;
     });
     console.log("Filtered Data:", filteredData);
-
-    res.status(200).json(filteredData);
+    result=filteredData
+    res.status(200).json({result});
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -31,13 +32,11 @@ UserStoreRouter.get("/userItems/:UserId", async (req, res) => {
 
 //======================================================================================================
 //user has gone which stores
-UserStoreRouter.get("/userStore/:UserId/:StoreId", async (req, res) => {
+UserStoreRouter.get("/userStore/:UserId", async (req, res) => {
   try {
     const UserId = req.params.UserId;
-    const StoreId = req.params.StoreId;
-    
     const snapshot = await db.collection('RequestDetails').where('UserId', '==', UserId).get();
-    const storeIds = new Set(); // Use a Set to avoid duplicate storeIds
+    const storeIds = new Set();
 
     if (snapshot.empty) {
       return res.status(404).json({ error: "Request not found." });
@@ -45,8 +44,6 @@ UserStoreRouter.get("/userStore/:UserId/:StoreId", async (req, res) => {
 
     snapshot.forEach(async (doc) => {
       const data = doc.data();
-      
-      // Iterate over orders to extract storeIds
       Object.keys(data.Orders).forEach(storeId => {
         storeIds.add(storeId); // Add storeId to the set
       });
@@ -61,14 +58,12 @@ UserStoreRouter.get("/userStore/:UserId/:StoreId", async (req, res) => {
       });
       return storeDetails;
     });
-
     // Wait for all store details to be fetched
-    const result = await Promise.all(storesPromises);
-    
+    let result = await Promise.all(storesPromises);
     // Flatten the array of arrays into a single array
     const flattenedResult = result.flat();
-    console.log(flattenedResult)
-    res.status(200).json(flattenedResult);
+    result=flattenedResult
+    res.status(200).json({result});
   } catch (error) {
     console.error("Error updating request:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -99,7 +94,7 @@ UserStoreRouter.get("/StoreItems/:ItemId", async (req, res) => {
       });
     }
     console.log(result);
-    res.status(200).json(result);
+    res.status(200).json({result});
   } catch (error) {
     console.error("Error updating request:", error);
     res.status(500).json({ error: "Internal Server Error" });

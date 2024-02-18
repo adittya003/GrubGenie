@@ -27,7 +27,7 @@ RegisterRouter.post("/registerStore", async (req, res) => {
           PhoneNumber: PhoneNumber
         };
         await RegisterRef.set(data);
-        res.status(200).json({ message: "success" });
+        res.status(200).json({ message: "success" , StoreId : StoreId});
     } catch (error) {
       console.error("Error authenticating user:", error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -37,14 +37,12 @@ RegisterRouter.post("/registerStore", async (req, res) => {
 
 RegisterRouter.post("/registerUser", async (req, res) => {
     try {
-
         const body = req.body;
         const DOB = body.DOB || null;
         const PhoneNumber = body.PhoneNumber; 
         const UserName = body.UserName ;
         const Email = validateEmail(body.Email) ? body.Email : null;
         const UserId = 'UI' + generateRandomString(10); 
-        
         const UserRef = db.collection('UserDetails').doc(UserId); // Reference to the document
         const data = {
           UserId: UserId,

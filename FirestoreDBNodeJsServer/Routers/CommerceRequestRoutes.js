@@ -5,11 +5,12 @@ const { auth, db, admin } = require("../db");
 const { haversine,generateRandomString,validateEmail } = require("../helper");
 CommerceRequestRouter.use(bodyParser.json());
 
-CommerceRequestRouter.post("/requestFood", async (req, res) => {
+CommerceRequestRouter.post("/requestItem", async (req, res) => {
     try {
         const requestData = req.body;
         const requestId = 'RQ' + generateRandomString(10); // Generate request ID
         const requestRef = db.collection('RequestDetails').doc(requestId); // Reference to the document
+        console.log(requestData);
         const Location = requestData.Location;
         const geoPoint = new admin.firestore.GeoPoint(Location[0], Location[1]);
         const data = {
@@ -30,10 +31,8 @@ CommerceRequestRouter.post("/requestFood", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
-  
-
 //PATCH
-  CommerceRequestRouter.patch("/requestFood/:requestId", async (req, res) => {
+  CommerceRequestRouter.patch("/requestItem/:requestId", async (req, res) => {
     try {
       const requestId = req.params.requestId;
       const requestData = req.body;
