@@ -9,7 +9,8 @@ VendorRouter.use(bodyParser.json());
 VendorRouter.post("/registerItem", async (req, res) => {
     try {
         const body = req.body;
-        const ExpiryDate = body.ExpiryDate; 
+        const ExpiryDates = body.ExpiryDate; 
+        const ExpiryDate = admin.firestore.Timestamp.fromDate(new Date(ExpiryDates));
         const ItemMRP = body.ItemMRP;
         const ItemSP = body.ItemSP;
         const ItemName= body.ItemName;
@@ -28,7 +29,7 @@ VendorRouter.post("/registerItem", async (req, res) => {
           ItemSP :ItemSP 
         };
         await ItemRef.set(data);
-        res.status(200).json({ message: "success" });
+        res.status(200).json({ message: "success" , ItemId:ItemId});
     } catch (error) {
       console.error("Error authenticating user:", error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -41,14 +42,16 @@ VendorRouter.patch("/updateItem/:itemId", async (req, res) => {
         const body = req.body;
         const ItemRef = db.collection('ItemDetails').doc(itemId);
         const itemSnapshot = await ItemRef.get();
+        const ExpiryDate = admin.firestore.Timestamp.fromDate(new Date(body.ExpiryDate));
         if (!itemSnapshot.exists) {
             return res.status(404).json({ error: "Item not found" });
         }
         const updateFields = {
             ItemName: body.ItemName || itemSnapshot.data().ItemName,
-            ExpiryDate: body.ExpiryDate || itemSnapshot.data().ExpiryDate,
+            ExpiryDate: ExpiryDate || itemSnapshot.data().ExpiryDate,
             StockQuantity: body.StockQuantity || itemSnapshot.data().StockQuantity ,
             ItemMRP: body.ItemMRP || itemSnapshot.data().ItemMRP,
+            ItemSP: body.ItemSP || itemSnapshot.data().ItemSP,
         };
         await ItemRef.update(updateFields);
         res.status(200).json({ message: "success" });
