@@ -12,14 +12,14 @@ def question_number(usr):
 
     if not doc_ref.get().exists:
         doc_ref.set({})
-        return str(0)
+        return str(1)
     else:
         # Retrieve the user's document data
         user_data = doc_ref.get().to_dict()
         print(user_data)
         # Calculate the length of the dictionary
         x = len(user_data) if user_data else 0
-        return str(x)
+        return str(x+1)
 
 # Update the document in Firestore
 def firestore_user_inputting(usr,question_no,new_question):
