@@ -42,5 +42,5 @@ app.use("/CommerceRequestRouter",CommerceRequestRouter);
 app.use("/RegisterRouter",RegisterRouter);
 app.use("/VendorRouter",VendorRouter);
 app.use("/UserStoreRouter", UserStoreRouter);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server started at ${PORT}`));
